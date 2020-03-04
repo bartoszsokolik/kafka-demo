@@ -1,0 +1,9 @@
+spring:
+  mail:
+    host:
+    port:
+
+kafka:
+  bootstrap-servers: 'http://localhost:9092'
+  topic: 'test'
+  consumer-group-id: 'mail-consumer-1'

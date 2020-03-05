@@ -19,6 +19,8 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
+    static final SendMailRequest NULL_EVENT = new SendMailRequest();
+
     private final String bootstrapServer;
 
     public KafkaConfig(@Value("${kafka.bootstrap-servers}") String bootstrapServer) {

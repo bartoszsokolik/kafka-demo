@@ -1,4 +1,4 @@
-package pl.solutions.software.sokolik.bartosz.producer.mail;
+package pl.solutions.software.sokolik.bartosz.producer.sms;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.solutions.software.sokolik.bartosz.event.SendMailEvent;
-import pl.solutions.software.sokolik.bartosz.producer.mail.domain.MailService;
+import pl.solutions.software.sokolik.bartosz.event.SendSmsEvent;
+import pl.solutions.software.sokolik.bartosz.producer.sms.domain.SmsService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/mail")
-public class MailController {
+@RequestMapping("/v1/sms")
+class SmsController {
 
-    private final MailService mailService;
+    private final SmsService smsService;
 
     @PostMapping
-    ResponseEntity<Void> createMailEvent(@RequestBody SendMailEvent request) {
-        mailService.sendEmailEvent(request);
+    ResponseEntity<Void> sendSms(@RequestBody SendSmsEvent event) {
+        smsService.sendSmsEvent(event);
         return ResponseEntity.ok().build();
     }
 }

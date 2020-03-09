@@ -5,8 +5,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>kafka-producer</module>
-        <module>kafka-consumer</module>
+        <module>kafka-mail-sender</module>
         <module>kafka-event</module>
+        <module>kafka-sms-sender</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import pl.solutions.software.sokolik.bartosz.event.SendSmsEvent;
+import pl.solutions.software.sokolik.bartosz.event.SendSmsRequest;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -12,10 +13,11 @@ public class SmsService {
     private final String topic;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void sendSmsEvent(SendSmsEvent request) {
+    public void sendSmsEvent(SendSmsRequest request) {
         try {
             log.info("Sending sms event {} to topic {}", request, topic);
-            kafkaTemplate.send(topic, request);
+            SendSmsEvent event = new SendSmsEvent(request.getBody(), request.getPhone());
+            kafkaTemplate.send(topic, event);
         } catch (Exception e) {
             log.info("Unable to send sms request to kafka");
         }

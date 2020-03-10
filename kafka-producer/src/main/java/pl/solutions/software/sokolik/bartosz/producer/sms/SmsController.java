@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.solutions.software.sokolik.bartosz.event.SendSmsEvent;
+import pl.solutions.software.sokolik.bartosz.event.SendSmsRequest;
 import pl.solutions.software.sokolik.bartosz.producer.sms.domain.SmsService;
 
 @RestController
@@ -17,7 +18,7 @@ class SmsController {
     private final SmsService smsService;
 
     @PostMapping
-    ResponseEntity<Void> sendSms(@RequestBody SendSmsEvent event) {
+    ResponseEntity<Void> sendSms(@RequestBody SendSmsRequest event) {
         smsService.sendSmsEvent(event);
         return ResponseEntity.ok().build();
     }

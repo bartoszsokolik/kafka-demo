@@ -1,19 +1,16 @@
 package pl.solutions.software.sokolik.bartosz.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class SendMailEvent extends Event {
-
-    @JsonProperty("body")
-    private String body;
 
     @JsonProperty("recipient")
     private String recipient;

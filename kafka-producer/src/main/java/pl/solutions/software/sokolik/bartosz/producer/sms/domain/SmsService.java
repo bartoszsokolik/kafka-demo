@@ -16,7 +16,7 @@ public class SmsService {
     public void sendSmsEvent(SendSmsRequest request) {
         try {
             log.info("Sending sms event {} to topic {}", request, topic);
-            SendSmsEvent event = new SendSmsEvent(request.getBody(), request.getPhone());
+            SendSmsEvent event = new SendSmsEvent().toBuilder().body(request.getBody()).phone(request.getPhone()).build();
             kafkaTemplate.send(topic, event);
         } catch (Exception e) {
             log.info("Unable to send sms request to kafka");

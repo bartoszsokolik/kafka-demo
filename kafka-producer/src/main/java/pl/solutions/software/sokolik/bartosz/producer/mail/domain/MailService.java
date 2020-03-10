@@ -16,7 +16,10 @@ public class MailService {
     public void sendEmailEvent(SendMailRequest request) {
         try {
             log.info("Sending mail event {} to topic {}", request, topic);
-            SendMailEvent event = new SendMailEvent(request.getBody(), request.getRecipient(), request.getSubject());
+            SendMailEvent event = new SendMailEvent().toBuilder()
+                    .body(request.getBody())
+                    .recipient(request.getRecipient())
+                    .subject(request.getSubject()).build();
             kafkaTemplate.send(topic, event);
         } catch (Exception e) {
             log.info("Unable to send mail request to kafka");

@@ -4,3 +4,10 @@ kafka:
 
 server:
   port: 8080
+
+external:
+  weather:
+    api:
+      url: 'https://community-open-weather-map.p.rapidapi.com'
+      key: '5302094e51msh67c13d06da94b67p1a51dbjsnad6db2ccfe51'
+      host: 'community-open-weather-map.p.rapidapi.com'

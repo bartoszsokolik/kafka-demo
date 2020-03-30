@@ -12,6 +12,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import pl.solutions.software.sokolik.bartosz.event.Event;
 import pl.solutions.software.sokolik.bartosz.event.SendMailEvent;
+import pl.solutions.software.sokolik.bartosz.event.correlation.kafka.SendMailEventRecordInterceptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,9 +39,10 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, SendMailEvent> kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, SendMailEvent> kafkaListenerContainerFactory(SendMailEventRecordInterceptor sendMailEventRecordInterceptor) {
         ConcurrentKafkaListenerContainerFactory<String, SendMailEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setRecordInterceptor(sendMailEventRecordInterceptor);
         return factory;
     }
 }

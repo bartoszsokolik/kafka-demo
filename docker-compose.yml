@@ -1,21 +1,58 @@
 version: '3.7'
 
 services:
+  grafana:
+    image: "grafana/grafana:latest"
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/influxdb.yml:/etc/grafana/provisioning/datasources/influxdb.yml
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./grafana/KafkaMailSenderDashboard.json:/var/lib/grafana/dashboards/KafkaMailSenderDashboard.json
+      - ./grafana/KafkaSmsSenderDashboard.json:/var/lib/grafana/dashboards/KafkaSmsSenderDashboard.json
+      - ./data/grafana-data:/var/lib/grafana
+
+  influxdb:
+    image: "influxdb:latest"
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influx/init.sql:/docker-entrypoint-initdb.d/influx_init.iql/
+      - ./data/influx-data:/var/lib/influxdb
+    environment:
+      INFLUXDB_HTTP_AUTH_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: admin
+
+  prometheus:
+    image: "prom/prometheus:latest"
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus
+
   kafka-zookeeper-2:
+    image: "wurstmeister/zookeeper"
     container_name: kafka-zookeeper-2
     hostname: kafka-zookeeper-2
     restart: unless-stopped
-    image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
     volumes:
-      - ./zk-data:/data
+      - ./data/zk-data:/data
 
   kafka-broker-2:
+    image: "wurstmeister/kafka"
     container_name: kafka-broker-2
     hostname: kafka-broker-2
     restart: unless-stopped
-    image: wurstmeister/kafka
     ports:
       - "9092:9092"
     environment:
@@ -26,45 +63,45 @@ services:
       KAFKA_BROKER_ID: 1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./kafka-data:/data
+      - ./data/kafka-data:/data
 
-  producer:
-    container_name: 'kafka-producer'
+  kafka-producer:
+    container_name: kafka-producer
     build:
       context: .
       dockerfile: ./kafka-producer/Dockerfile
     ports:
-      - '8080:8080'
+      - "8080:8080"
     depends_on:
       - kafka-broker-2
     environment:
-      KAFKA_BOOTSTRAP-SERVERS: 'http://kafka-broker-2:9092'
-      KAFKA_TOPIC: 'test'
+      KAFKA_BOOTSTRAP-SERVERS: http://kafka-broker-2:9092
+      KAFKA_TOPIC: test
 
-  mail:
-    container_name: 'kafka-mail-sender'
+  kafka-mail-sender:
+    container_name: kafka-mail-sender
     build:
       context: .
       dockerfile: ./kafka-mail-sender/Dockerfile
     ports:
-      - '8082:8080'
+      - "8082:8080"
     depends_on:
       - kafka-broker-2
     environment:
-      KAFKA_BOOTSTRAP-SERVERS: 'http://kafka-broker-2:9092'
-      KAFKA_TOPIC: 'test'
-      KAFKA_CONUSMER-GROUP-ID: 'mail-sender'
+      KAFKA_BOOTSTRAP-SERVERS: http://kafka-broker-2:9092
+      KAFKA_TOPIC: test
+      KAFKA_CONUSMER-GROUP-ID: mail-sender
 
-  sms:
-    container_name: 'kafka-sms-sender'
+  kafka-sms-sender:
+    container_name: kafka-sms-sender
     build:
       context: .
       dockerfile: ./kafka-sms-sender/Dockerfile
     ports:
-      - '8084:8080'
+      - "8084:8080"
     depends_on:
       - kafka-broker-2
     environment:
-      KAFKA_BOOTSTRAP-SERVERS: 'http://kafka-broker-2:9092'
-      KAFKA_TOPIC: 'test'
-      KAFKA_CONUSMER-GROUP-ID: 'sms-sender'
+      KAFKA_BOOTSTRAP-SERVERS: http://kafka-broker-2:9092
+      KAFKA_TOPIC: test
+      KAFKA_CONUSMER-GROUP-ID: sms-sender

@@ -1,7 +1,18 @@
 kafka:
-  bootstrap-servers: 'http://localhost:9092'
+  bootstrap-servers: 'http://kafka-broker-2:9092'
   topic: 'test'
   consumer-group-id: 'sms-consumer'
 
 server:
   port: 8084
+
+management:
+  metrics:
+    export:
+      influx:
+        db: kafkasmssender
+        uri: http://influxdb:8086
+        user-name: admin
+        password: admin
+        auto-create-db: false
+        step: 10s

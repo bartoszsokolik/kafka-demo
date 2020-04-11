@@ -8,6 +8,7 @@
         <module>kafka-mail-sender</module>
         <module>kafka-event</module>
         <module>kafka-sms-sender</module>
+        <module>logger-test</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -50,6 +51,24 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
             <version>1.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>2.10.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+            <version>2.10.3</version>
         </dependency>
 
         <dependency>

@@ -8,7 +8,6 @@
         <module>kafka-mail-sender</module>
         <module>kafka-event</module>
         <module>kafka-sms-sender</module>
-        <module>logger-test</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
